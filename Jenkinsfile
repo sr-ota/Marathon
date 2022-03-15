@@ -10,7 +10,7 @@ pipeline {
     }
     environment {
         CI = true
-        ARTIFACTORY_ACCESS_TOKEN = credentials('JFROG_ACCESS_TOLEN')
+        ARTIFACTORY_ACCESS_TOKEN = credentials('JFROG_ACCESS_TOKEN')
     }
     stages {
         stage('Build') { 
