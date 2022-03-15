@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'mvn -B clean install' 
+                sh 'jf mvn -B clean install' 
             }
         }
         stage('Xray Scan'){
