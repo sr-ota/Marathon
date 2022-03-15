@@ -6,8 +6,11 @@ pipeline {
         }
     }
     parameters {
-        string (name: 'ART_API_KEY', defaultValue: '', description: 'API Key for JFrog Artifactory')
-        string (name: 'ART_URL', defaultValue: '', description: 'URL for JFrog Artifactory')
+        string (name: 'ART_URL', defaultValue: 'https://evaluate.jfrog.io/artifactory', description: 'URL for JFrog Artifactory')
+    }
+    environment {
+        CI = true
+        ARTIFACTORY_ACCESS_TOKEN = credentials('JFROG_ACCESS_TOLEN')
     }
     stages {
         stage('Build') { 
@@ -17,7 +20,7 @@ pipeline {
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload --url ${ART_URL} --access-token ${ART_API_KEY} target/marathon.war Marathon-App-Jenkins/'
+                sh 'jf rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.war Marathon-App-Jenkins/'
            }
         }
     }
