@@ -16,6 +16,7 @@ pipeline {
                 script{
                     rtServer = Artifactory.newServer url: "${params.ART_URL}", username: "${params.ART_USER}", password: "${params.ART_PASSWORD}"
                 }
+            }
         }
         stage('Build') { 
             steps {
