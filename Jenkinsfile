@@ -21,17 +21,12 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'mvn -B clean install' 
-                script {
-                    rtServer.publishBuildInfo buildInfo
-                }
             }
         }
         stage('Xray Scan'){
             steps {
                 script {
                     xrayConfig = [
-                        'buildName'   : buildInfo.name,
-                        'buildNumber' : buildInfo.number,
                         'failBuild'   : "${params.FAIL_BUILD}".toBoolean()
                     ]
                     xrayResults = rtServer.xrayScan xrayConfig
