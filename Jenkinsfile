@@ -23,5 +23,10 @@ pipeline {
                 sh 'jf rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.war Marathon-App-Jenkins/'
            }
         }
+        stage('JFrog Build Publish'){
+            steps {
+                sh 'jf rt bp --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} war-build 1'
+           }
+        }
     }
 }
