@@ -1,4 +1,4 @@
-def rtServer, rtDocker, buildInfo, privateDockerRegistry
+def rtServer, buildInfo
 
 pipeline {
     agent {
@@ -21,6 +21,9 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'mvn -B clean install' 
+                script {
+                    rtServer.publishBuildInfo buildInfo
+                }
             }
         }
         stage('Xray Scan'){
