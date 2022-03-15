@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh 'jf mvn-config' 
                 sh 'jf rt build-add-git'
-                sh 'rt build-add-dependencies'
+                sh 'jf rt build-add-dependencies'
                 sh 'jf mvn -B clean install' 
             }
         }
