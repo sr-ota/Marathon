@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload --url ${ART_URL} --access-token ${ART_API_KEY} target/marathon.war marathon-web/'
+                sh 'jf rt upload --url ${ART_URL} --access-token ${ART_API_KEY} target/marathon.war Marathon-App-Jenkins/'
            }
         }
     }
