@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'jf mvn-config -B clean install' 
+                sh 'jf mvn-config' 
                 sh 'jf mvn -B clean install' 
             }
         }
