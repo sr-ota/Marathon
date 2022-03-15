@@ -13,7 +13,7 @@ pipeline {
         ARTIFACTORY_ACCESS_TOKEN = credentials('JFROG_ACCESS_TOKEN')
         ART_URL = "https://evaluate.jfrog.io/artifactory"
         BUILD_NAME = "war-build"
-        BUILD_ID = 2
+        BUILD_ID = 3
     }
     stages {
         stage('Build') { 
@@ -26,12 +26,12 @@ pipeline {
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number BUILD_ID target/marathon.war Marathon-App-Jenkins/'
+                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins/ --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number BUILD_ID'
            }
         }
         stage('JFrog Build Publish'){
             steps {
-                sh 'jf rt build-publish --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN $BUILD_NAME $BUILD_ID'
+                sh 'jf rt build-publish $BUILD_NAME $BUILD_ID --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN'
            }
         }
     }
