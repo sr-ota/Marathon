@@ -31,7 +31,6 @@ pipeline {
         }
         stage('JFrog Build Publish'){
             steps {
-                sh 'jf rt upload --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN target/marathon.war generic-local --build-name $BUILD_NAME --build-number $BUILD_ID'
                 sh 'jf rt build-publish --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN $BUILD_NAME $BUILD_ID'
            }
         }
