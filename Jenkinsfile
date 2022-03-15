@@ -1,48 +1,26 @@
+def rtServer, buildInfo
+
 pipeline {
-    agent any
+    agent {
+        any {
+        }
+    }
+    parameters {
+        string (name: 'ART_API_KEY', defaultValue: '', description: 'API Key for JFrog Artifactory')
+        string (name: 'ART_URL', defaultValue: '', description: 'URL for JFrog Artifactory')
+    }
     stages {
-        stage ('Artifactory configuration') {
+        stage('Build') { 
             steps {
-                rtServer (
-                    id: "jfrogeval",
-                    url: "https://evaluate.jfrog.io",
-                    credentialsId: CREDENTIALS
-                )
-
-                rtMavenDeployer (
-                    id: "MAVEN_DEPLOYER",
-                    serverId: "jfrogeval",
-                    releaseRepo: "myrepo",
-                    snapshotRepo: "mylocalrepo"
-                )
-
-                //rtMavenResolver (
-                 //   id: "MAVEN_RESOLVER",
-                 //   serverId: "jfrogeval",
-                 //   releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
-                 //   snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
-                //)
+                sh 'mvn -B clean install' 
+                sh 'ls -al'
+                sh 'ls -al target'
             }
         }
-
-        stage ('Exec Maven') {
+        stage('Xray Scan'){
             steps {
-                rtMavenRun (
-                    tool: MAVEN_TOOL, // Tool name from Jenkins configuration
-                    pom: 'pom.xml',
-                    goals: 'clean build',
-                    deployerId: "MAVEN_DEPLOYER",
-                    resolverId: "MAVEN_RESOLVER"
-                )
-            }
-        }
-
-        stage ('Publish build info') {
-            steps {
-                rtPublishBuildInfo (
-                    serverId: "jfrogeval"
-                )
-            }
+                sh 'jfrog rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.jar marathon-web/'
+           }
         }
     }
 }
