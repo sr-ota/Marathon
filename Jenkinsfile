@@ -5,7 +5,7 @@ pipeline {
             steps {
                 rtServer (
                     id: "jfrogeval",
-                    url: https://evaluate.jfrog.io,
+                    url: "https://evaluate.jfrog.io",
                     credentialsId: CREDENTIALS
                 )
 
