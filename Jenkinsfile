@@ -27,6 +27,8 @@ pipeline {
             steps {
                 script {
                     xrayConfig = [
+                        'buildName'   : 'jenkins-mvn',
+                        'buildNumber' : '0.0.0.1',
                         'failBuild'   : "${params.FAIL_BUILD}".toBoolean()
                     ]
                     xrayResults = rtServer.xrayScan xrayConfig
