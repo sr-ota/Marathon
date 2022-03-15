@@ -5,23 +5,23 @@ pipeline {
             steps {
                 rtServer (
                     id: "jfrogeval",
-                    url: SERVER_URL,
+                    url: https://evaluate.jfrog.io,
                     credentialsId: CREDENTIALS
                 )
 
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
                     serverId: "jfrogeval",
-                    releaseRepo: ARTIFACTORY_LOCAL_RELEASE_REPO,
-                    snapshotRepo: ARTIFACTORY_LOCAL_SNAPSHOT_REPO
+                    releaseRepo: "myrepo",
+                    snapshotRepo: "mylocalrepo"
                 )
 
-                rtMavenResolver (
-                    id: "MAVEN_RESOLVER",
-                    serverId: "jfrogeval",
-                    releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
-                    snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
-                )
+                //rtMavenResolver (
+                 //   id: "MAVEN_RESOLVER",
+                 //   serverId: "jfrogeval",
+                 //   releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
+                 //   snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
+                //)
             }
         }
 
