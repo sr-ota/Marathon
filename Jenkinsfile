@@ -13,13 +13,11 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'mvn -B clean install' 
-                sh 'ls -al'
-                sh 'ls -al target'
             }
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.jar marathon-web/'
+                sh 'jf rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.war marathon-web/'
            }
         }
     }
