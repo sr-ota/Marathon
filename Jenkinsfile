@@ -16,6 +16,8 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'jf mvn-config' 
+                sh 'jf rt build-add-git'
+                sh 'rt build-add-dependencies'
                 sh 'jf mvn -B clean install' 
             }
         }
@@ -26,7 +28,8 @@ pipeline {
         }
         stage('JFrog Build Publish'){
             steps {
-                sh 'jf rt bp --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} war-build 1'
+                sh 'jf rt upload "target/*" generic-local --build-name war-build --build-number 1'
+                sh 'jf rt build-publish --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} war-build 1'
            }
         }
     }
