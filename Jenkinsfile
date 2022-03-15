@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Xray Scan'){
             steps {
-                sh 'jfrog rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.jar marathon-web/'
+                sh 'jf rt upload --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/marathon.jar marathon-web/'
            }
         }
     }
