@@ -1,39 +1,47 @@
-def rtServer, buildInfo
-
 pipeline {
-    agent {
-        any {
-        }
-    }
-    parameters {
-        string (name: 'ART_URL', defaultValue: 'http://localhost:8081/artifactory', description: 'Artifactory where artifacts will be deployed/resolved')
-        string (name: 'ART_USER', defaultValue: 'admin', description: 'Artifactory user for deploy/resolve artifacts')
-        string (name: 'ART_PASSWORD', defaultValue: 'password', description: 'Artifactory password for deploy/resolve artifacts')
-    }
+    agent any
     stages {
-        stage('Setup'){
+        stage ('Artifactory configuration') {
             steps {
-                script{
-                    rtServer = Artifactory.newServer url: "${params.ART_URL}", username: "${params.ART_USER}", password: "${params.ART_PASSWORD}"
-                }
+                rtServer (
+                    id: "jfrogeval",
+                    url: SERVER_URL,
+                    credentialsId: CREDENTIALS
+                )
+
+                rtMavenDeployer (
+                    id: "MAVEN_DEPLOYER",
+                    serverId: "jfrogeval",
+                    releaseRepo: ARTIFACTORY_LOCAL_RELEASE_REPO,
+                    snapshotRepo: ARTIFACTORY_LOCAL_SNAPSHOT_REPO
+                )
+
+                rtMavenResolver (
+                    id: "MAVEN_RESOLVER",
+                    serverId: "jfrogeval",
+                    releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
+                    snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
+                )
             }
         }
-        stage('Build') { 
+
+        stage ('Exec Maven') {
             steps {
-                sh 'mvn -B clean install' 
+                rtMavenRun (
+                    tool: MAVEN_TOOL, // Tool name from Jenkins configuration
+                    pom: 'pom.xml',
+                    goals: 'clean build',
+                    deployerId: "MAVEN_DEPLOYER",
+                    resolverId: "MAVEN_RESOLVER"
+                )
             }
         }
-        stage('Xray Scan'){
+
+        stage ('Publish build info') {
             steps {
-                script {
-                    xrayConfig = [
-                        'buildName'   : 'jenkins-mvn',
-                        'buildNumber' : '0.0.0.1',
-                        'failBuild'   : "${params.FAIL_BUILD}".toBoolean()
-                    ]
-                    xrayResults = rtServer.xrayScan xrayConfig
-                    echo xrayResults as String
-                }
+                rtPublishBuildInfo (
+                    serverId: "jfrogeval"
+                )
             }
         }
     }
