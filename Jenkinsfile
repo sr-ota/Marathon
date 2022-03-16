@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'jf mvn-config' 
+                sh 'jf mvn-config --scan true' 
                 sh 'jf rt build-add-git $BUILD_NAME $BUILD_ID'
                 sh 'jf rt build-add-dependencies $BUILD_NAME $BUILD_ID "integration/**/*.jar"'
                 sh 'jf mvn -B clean install' 
@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --scan --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID'
+                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID'
            }
         }
         stage('JFrog Build Publish'){
