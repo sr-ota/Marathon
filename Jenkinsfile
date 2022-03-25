@@ -12,7 +12,7 @@ pipeline {
         CI = true
         ARTIFACTORY_ACCESS_TOKEN = credentials('JFROG_ACCESS_TOKEN')
         ART_URL = "https://evaluate.jfrog.io/artifactory"
-        BUILD_NAME = "war-build"
+        BUILD_NAME = "npm-cli-build"
         BUILD_ID = 3
     }
     stages {
@@ -20,13 +20,14 @@ pipeline {
             steps {
                 sh 'jf mvn-config  --scan true' 
                 sh 'jf rt build-add-git $BUILD_NAME $BUILD_ID'
-                sh 'jf rt build-add-dependencies $BUILD_NAME $BUILD_ID "integration/**/*.jar"'
-                sh 'jf mvn -B clean install' 
+                sh 'jf npm install --build-name $BUILD_NAME --build-number $BUILD_ID' 
+                sh 'jf rt build-add-dependencies $BUILD_NAME $BUILD_ID "node_modules/**/*"'
             }
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID'
+                sh 'ls'
+                // sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID'
            }
         }
         stage('JFrog Build Publish'){
