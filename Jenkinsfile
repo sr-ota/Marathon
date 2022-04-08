@@ -24,14 +24,14 @@ pipeline {
                 sh 'jf mvn -B clean install' 
             }
         }
-        stage('Xray Scan'){
+        /*stage('Xray Scan'){
             steps {
-                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --build-name $BUILD_NAME --build-number $BUILD_ID'
+                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID --project'
            }
-        }
+        }*/
         stage('JFrog Build Publish'){
             steps {
-                sh 'jf rt build-publish $BUILD_NAME $BUILD_ID --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN --project "x01"'
+                sh 'jf rt build-publish $BUILD_NAME $BUILD_ID --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN  --project "x01"'
            }
         }
     }
