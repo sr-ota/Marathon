@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'jf mvn-config  --scan true' 
+                sh 'jf mvn-config' 
                 sh 'jf rt build-add-git $BUILD_NAME $BUILD_ID'
                 sh 'jf rt build-add-dependencies $BUILD_NAME $BUILD_ID "integration/**/*.jar"'
                 sh 'jf mvn -B clean install' 
