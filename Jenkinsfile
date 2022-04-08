@@ -12,8 +12,8 @@ pipeline {
         CI = true
         ARTIFACTORY_ACCESS_TOKEN = credentials('JFROG_ACCESS_TOKEN')
         ART_URL = "https://evaluate.jfrog.io/artifactory"
-        BUILD_NAME = "war-build"
-        BUILD_ID = 3
+        BUILD_NAME = "war-build-new"
+        BUILD_ID = 10
     }
     stages {
         stage('Build') { 
