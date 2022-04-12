@@ -31,7 +31,7 @@ pipeline {
         }
         stage('JFrog Build Publish'){
             steps {
-                sh 'jf rt build-publish $BUILD_NAME $BUILD_ID --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN  --project "x01"'
+                sh 'jf rt build-publish $BUILD_NAME $BUILD_ID --url $ART_URL --access-token $ARTIFACTORY_ACCESS_TOKEN  --project "x02"'
            }
         }
     }
