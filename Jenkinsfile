@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Xray Scan'){
             steps {
-                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID'
+                sh 'jf rt upload target/marathon.war Marathon-App-Jenkins --url ${ART_URL} --access-token ${ARTIFACTORY_ACCESS_TOKEN} --build-name $BUILD_NAME --build-number $BUILD_ID --project "x02"'
            }
         }
         stage('JFrog Build Publish'){
